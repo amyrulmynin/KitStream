@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>KitStream - Stream & Download Files</title>
+    <meta name="description"
+        content="KitStream - Fast and reliable file streaming and download service. Convert your Telegram files to direct links.">
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/Botsthe/DATABASE@main/image/logo.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#00d4ff",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#0a0a0f",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        body {
+            min-height: 100dvh;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #00d4ff, #0099ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glow {
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+    <div
+        class="relative flex h-auto min-h-screen w-full flex-col bg-background-dark font-display overflow-x-hidden pb-24">
+
+        <!-- Hero Section -->
+        <div class="relative w-full h-[80vh] min-h-[600px]">
+            <!-- Background Gradient -->
+            <div class="absolute inset-0 bg-gradient-to-br from-background-dark via-[#0a1628] to-background-dark"></div>
+            <!-- Animated Grid -->
+            <div class="absolute inset-0 opacity-10"
+                style="background-image: linear-gradient(rgba(0,212,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,255,.1) 1px, transparent 1px); background-size: 50px 50px;">
+            </div>
+            <!-- Glow Effects -->
+            <div
+                class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-primary/20 rounded-full blur-[120px]">
+            </div>
+
+            <!-- Top Navigation -->
+            <div class="absolute top-0 left-0 w-full p-6 flex justify-between items-center z-10">
+                <span class="text-white font-extrabold text-2xl tracking-tight">
+                    <span class="gradient-text">Kit</span>Stream
+                </span>
+                <a href="https://t.me/kitstreambot"
+                    class="flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-md px-4 py-2 rounded-full transition-all">
+                    <span class="material-symbols-outlined text-primary text-[20px]">smart_toy</span>
+                    <span class="text-white text-sm font-medium">Open Bot</span>
+                </a>
+            </div>
+
+            <!-- Hero Content -->
+            <div class="absolute inset-0 flex flex-col items-center justify-center px-6 text-center z-10">
+                <div
+                    class="inline-flex items-center gap-2 mb-6 bg-white/5 border border-white/10 rounded-full px-4 py-2 backdrop-blur-md">
+                    <span class="material-symbols-outlined text-primary text-[16px]">bolt</span>
+                    <span class="text-white/80 text-sm font-medium">Fast & Reliable Streaming</span>
+                </div>
+
+                <h1 class="text-white text-5xl md:text-7xl font-extrabold leading-tight tracking-tight mb-6">
+                    Stream Files<br />
+                    <span class="gradient-text">Instantly</span>
+                </h1>
+
+                <p class="text-white/60 text-lg md:text-xl max-w-lg mb-10 leading-relaxed">
+                    Convert your Telegram files to direct download and streaming links. Fast, free, and unlimited.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 w-full max-w-md">
+                    <a href="https://t.me/kitstreambot"
+                        class="flex-1 bg-primary hover:bg-primary/90 text-background-dark font-bold py-4 px-8 rounded-xl flex items-center justify-center gap-2 transition-all glow">
+                        <span class="material-symbols-outlined text-[20px]">play_arrow</span>
+                        Start Now
+                    </a>
+                    <a href="https://t.me/kitstreambot"
+                        class="flex-1 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold py-4 px-8 rounded-xl flex items-center justify-center gap-2 transition-all">
+                        <span class="material-symbols-outlined text-[20px]">help</span>
+                        How It Works
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="w-full py-16 px-6">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-white text-3xl md:text-4xl font-bold text-center mb-4">Why KitStream?</h2>
+                <p class="text-white/50 text-center mb-12 max-w-lg mx-auto">Experience the fastest way to share and
+                    stream your files</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Feature 1 -->
+                    <div
+                        class="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-primary/50 transition-all group">
+                        <div
+                            class="w-14 h-14 bg-primary/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/30 transition-all">
+                            <span class="material-symbols-outlined text-primary text-3xl">bolt</span>
+                        </div>
+                        <h3 class="text-white text-xl font-bold mb-2">Lightning Fast</h3>
+                        <p class="text-white/50 text-sm leading-relaxed">Generate streaming links in seconds. No
+                            waiting, no delays.</p>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div
+                        class="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-primary/50 transition-all group">
+                        <div
+                            class="w-14 h-14 bg-primary/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/30 transition-all">
+                            <span class="material-symbols-outlined text-primary text-3xl">all_inclusive</span>
+                        </div>
+                        <h3 class="text-white text-xl font-bold mb-2">Unlimited Files</h3>
+                        <p class="text-white/50 text-sm leading-relaxed">No file size limits. Stream videos up to 4GB
+                            and beyond.</p>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div
+                        class="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-primary/50 transition-all group">
+                        <div
+                            class="w-14 h-14 bg-primary/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/30 transition-all">
+                            <span class="material-symbols-outlined text-primary text-3xl">link</span>
+                        </div>
+                        <h3 class="text-white text-xl font-bold mb-2">Permanent Links</h3>
+                        <p class="text-white/50 text-sm leading-relaxed">Your links never expire. Share them anywhere,
+                            anytime.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works Section -->
+        <div class="w-full py-16 px-6 bg-white/[0.02]">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-white text-3xl md:text-4xl font-bold text-center mb-12">How It Works</h2>
+
+                <div class="flex flex-col md:flex-row gap-8 items-center justify-center">
+                    <!-- Step 1 -->
+                    <div class="flex flex-col items-center text-center max-w-xs">
+                        <div
+                            class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mb-4 text-primary text-2xl font-bold">
+                            1</div>
+                        <h3 class="text-white font-bold mb-2">Send File</h3>
+                        <p class="text-white/50 text-sm">Send any file to our Telegram bot</p>
+                    </div>
+
+                    <div class="hidden md:block text-white/20">
+                        <span class="material-symbols-outlined text-4xl">arrow_forward</span>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="flex flex-col items-center text-center max-w-xs">
+                        <div
+                            class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mb-4 text-primary text-2xl font-bold">
+                            2</div>
+                        <h3 class="text-white font-bold mb-2">Get Links</h3>
+                        <p class="text-white/50 text-sm">Instantly receive stream & download links</p>
+                    </div>
+
+                    <div class="hidden md:block text-white/20">
+                        <span class="material-symbols-outlined text-4xl">arrow_forward</span>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="flex flex-col items-center text-center max-w-xs">
+                        <div
+                            class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mb-4 text-primary text-2xl font-bold">
+                            3</div>
+                        <h3 class="text-white font-bold mb-2">Share & Stream</h3>
+                        <p class="text-white/50 text-sm">Share links or stream directly in browser</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="w-full py-16 px-6">
+            <div class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="text-4xl md:text-5xl font-extrabold gradient-text mb-2">10K+</div>
+                    <div class="text-white/50 text-sm">Active Users</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl md:text-5xl font-extrabold gradient-text mb-2">50K+</div>
+                    <div class="text-white/50 text-sm">Files Streamed</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl md:text-5xl font-extrabold gradient-text mb-2">99.9%</div>
+                    <div class="text-white/50 text-sm">Uptime</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl md:text-5xl font-extrabold gradient-text mb-2">4GB</div>
+                    <div class="text-white/50 text-sm">Max File Size</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="w-full py-16 px-6">
+            <div
+                class="max-w-2xl mx-auto bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30 rounded-3xl p-8 md:p-12 text-center">
+                <h2 class="text-white text-3xl md:text-4xl font-bold mb-4">Ready to Start?</h2>
+                <p class="text-white/60 mb-8 max-w-md mx-auto">Join thousands of users who trust KitStream for their
+                    file streaming needs.</p>
+                <a href="https://t.me/kitstreambot"
+                    class="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-background-dark font-bold py-4 px-10 rounded-xl transition-all glow">
+                    <span class="material-symbols-outlined text-[20px]">telegram</span>
+                    Open Telegram Bot
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="w-full py-8 px-6 border-t border-white/10">
+            <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="text-white/40 text-sm">
+                    © 2026 KitStream. All rights reserved.
+                </div>
+                <div class="flex items-center gap-6">
+                    <a href="https://t.me/kitstreambot" class="text-white/40 hover:text-primary transition-colors">
+                        <span class="text-sm">Telegram</span>
+                    </a>
+                    <a href="#" class="text-white/40 hover:text-primary transition-colors">
+                        <span class="text-sm">Terms</span>
+                    </a>
+                    <a href="#" class="text-white/40 hover:text-primary transition-colors">
+                        <span class="text-sm">Privacy</span>
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>

@@ -1,4 +1,6 @@
 import re, math, logging, secrets, time, mimetypes
+import aiofiles
+import os
 from aiohttp import web
 from aiohttp.http_exceptions import BadStatusLine
 from info import *
@@ -14,19 +16,21 @@ class_cache = {}
 
 @routes.get("/", allow_head=True)
 async def root_route_handler(_):
-    return web.json_response({
-        "server_status": "running",
-        "uptime": get_readable_time(time.time() - StartTime),
-        "telegram_bot": "@" + BOT_USERNAME,
-        "connected_bots": len(multi_clients),
-        "loads": {
-            "bot" + str(i + 1): load
-            for i, (_, load) in enumerate(
-                sorted(work_loads.items(), key=lambda x: x[1], reverse=True)
-            )
-        },
-        "version": __version__,
-    })
+    try:
+        template_file = os.path.join("web", "template", "index.html")
+        async with aiofiles.open(template_file, mode='r') as f:
+            content = await f.read()
+        return web.Response(text=content, content_type="text/html")
+    except Exception as e:
+        logging.error(f"Error loading landing page: {e}")
+        return web.json_response({
+            "server_status": "running",
+            "uptime": get_readable_time(time.time() - StartTime),
+            "telegram_bot": "@" + BOT_USERNAME,
+            "connected_bots": len(multi_clients),
+            "version": __version__,
+        })
+
 
 @routes.get(r"/watch/{path:\S+}", allow_head=True)
 async def stream_watch_handler(request: web.Request):
