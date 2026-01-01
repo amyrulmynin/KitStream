@@ -54,13 +54,31 @@ async def start():
     now = datetime.now(tz)
     time = now.strftime("%H:%M:%S %p")
     kit_stream_bot.loop.create_task(check_expired_premium(kit_stream_bot))
-    await kit_stream_bot.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_TXT.format(today, time))
-    await kit_stream_bot.send_message(chat_id=ADMINS[0], text='<b>KitStream Bot Restarted!!</b>')
-    await kit_stream_bot.send_message(chat_id=SUPPORT_GROUP, text=f"<b>{me.mention} ʀᴇsᴛᴀʀᴛᴇᴅ 🤖</b>")
+    
+    # Start web server FIRST before sending messages
     app = web.AppRunner(await web_server())
     await app.setup()
     bind_address = "0.0.0.0"
     await web.TCPSite(app, bind_address, PORT).start()
+    logging.info(f"Web Server Started at port {PORT}")
+    
+    # Send startup messages (non-blocking, wrapped in try-except)
+    try:
+        await kit_stream_bot.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_TXT.format(today, time))
+    except Exception as e:
+        logging.error(f"Failed to send to LOG_CHANNEL: {e}")
+    
+    try:
+        await kit_stream_bot.send_message(chat_id=ADMINS[0], text='<b>KitStream Bot Restarted!!</b>')
+    except Exception as e:
+        logging.error(f"Failed to send to ADMIN: {e}")
+    
+    try:
+        await kit_stream_bot.send_message(chat_id=SUPPORT_GROUP, text=f"<b>{me.mention} ʀᴇsᴛᴀʀᴛᴇᴅ 🤖</b>")
+    except Exception as e:
+        logging.error(f"Failed to send to SUPPORT_GROUP: {e}")
+    
+    logging.info("KitStream Bot Started Successfully!")
     await idle()
 
 if __name__ == '__main__':
