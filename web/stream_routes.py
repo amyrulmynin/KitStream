@@ -299,12 +299,21 @@ async def admin_api_files(request: web.Request):
 
 @routes.delete("/admin/api/files/{file_id}")
 async def admin_api_delete_file(request: web.Request):
-    """Delete a file"""
+    """Delete a file from database AND Telegram"""
     session = get_admin_session(request)
     if not session:
         raise web.HTTPUnauthorized(text="Not authenticated")
     
     file_id = request.match_info['file_id']
+    
+    # Delete from Telegram BIN_CHANNEL
+    try:
+        await kit_stream_bot.delete_messages(chat_id=BIN_CHANNEL, message_ids=int(file_id))
+        logging.info(f"Deleted message {file_id} from BIN_CHANNEL")
+    except Exception as e:
+        logging.error(f"Failed to delete from Telegram: {e}")
+    
+    # Delete from database
     await db.delete_file_by_id(file_id)
     return web.json_response({"success": True})
 
