@@ -9,8 +9,6 @@
   <link rel="icon" href="https://cdn.jsdelivr.net/gh/Botsthe/DATABASE@main/image/logo.png" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <!-- Plyr CSS -->
-  <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css">
   <style>
     * {
       margin: 0;
@@ -74,7 +72,7 @@
       flex-direction: column;
       align-items: center;
       padding: 2rem 1rem;
-      max-width: 1000px;
+      max-width: 900px;
       margin: 0 auto;
       width: 100%;
     }
@@ -83,43 +81,30 @@
     .player-container {
       width: 100%;
       background: #000;
-      border-radius: 12px;
+      border-radius: 8px;
       overflow: hidden;
       margin-bottom: 1.5rem;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     }
 
-    /* Plyr Custom Styling */
-    .plyr {
-      --plyr-color-main: #00d4ff;
-      --plyr-video-background: #000;
-      --plyr-menu-background: #1a1a1a;
-      --plyr-menu-color: #fff;
-    }
-
-    .plyr--video {
-      border-radius: 12px;
-    }
-
-    .plyr__control--overlaid {
-      background: rgba(0, 212, 255, 0.9);
-    }
-
-    .plyr__control--overlaid:hover {
-      background: #00d4ff;
+    .player-container video {
+      width: 100%;
+      display: block;
+      aspect-ratio: 16/9;
+      background: #000;
     }
 
     /* Download Button */
     .download-btn {
       width: 100%;
-      max-width: 700px;
+      max-width: 600px;
       padding: 1rem 2rem;
-      background: linear-gradient(135deg, #00d4ff, #0099ff);
-      border: none;
-      color: #000;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      border: 1px solid #2a2a4a;
+      color: #fff;
       font-size: 1.1rem;
-      font-weight: 700;
-      border-radius: 12px;
+      font-weight: 600;
+      border-radius: 8px;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -131,53 +116,15 @@
     }
 
     .download-btn:hover {
+      background: linear-gradient(135deg, #2a2a4e, #26315e);
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
-    }
-
-    /* Player Buttons */
-    .player-buttons {
-      display: flex;
-      gap: 0.75rem;
-      width: 100%;
-      max-width: 700px;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    .player-btn {
-      flex: 1;
-      min-width: 140px;
-      padding: 0.875rem 1.25rem;
-      background: #1a1a1a;
-      border: 1px solid #333;
-      color: #fff;
-      font-size: 0.9rem;
-      font-weight: 600;
-      border-radius: 10px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      transition: all 0.2s;
-      text-decoration: none;
-    }
-
-    .player-btn:hover {
-      background: #2a2a2a;
-      border-color: #00d4ff;
-      color: #00d4ff;
-    }
-
-    .player-btn i {
-      font-size: 1.1rem;
+      box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
     }
 
     /* Embed Code Section */
     .embed-section {
       width: 100%;
-      max-width: 700px;
+      max-width: 600px;
       margin-bottom: 1.5rem;
     }
 
@@ -189,38 +136,32 @@
 
     .embed-code {
       width: 100%;
-      padding: 0.875rem 1rem;
+      padding: 0.75rem 1rem;
       background: #111;
       border: 1px solid #333;
-      border-radius: 8px;
+      border-radius: 6px;
       color: #666;
-      font-family: 'Monaco', 'Consolas', monospace;
+      font-family: monospace;
       font-size: 0.8rem;
       overflow-x: auto;
       white-space: nowrap;
-      cursor: pointer;
-      transition: border-color 0.2s;
-    }
-
-    .embed-code:hover {
-      border-color: #00d4ff;
     }
 
     /* File Info */
     .file-info {
       width: 100%;
-      max-width: 700px;
+      max-width: 600px;
       background: #111;
       border: 1px solid #222;
-      border-radius: 12px;
-      padding: 1.25rem 1.5rem;
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
       margin-bottom: 1.5rem;
     }
 
     .file-info h3 {
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: #00d4ff;
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -229,7 +170,7 @@
     .file-info-row {
       display: flex;
       justify-content: space-between;
-      padding: 0.625rem 0;
+      padding: 0.5rem 0;
       border-bottom: 1px solid #1a1a1a;
       font-size: 0.9rem;
     }
@@ -249,81 +190,59 @@
       max-width: 60%;
     }
 
-    /* Subtitle Upload */
-    .subtitle-section {
-      width: 100%;
-      max-width: 700px;
-      background: #111;
-      border: 1px solid #222;
-      border-radius: 12px;
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .subtitle-section h3 {
-      font-size: 0.95rem;
-      color: #fff;
-      margin-bottom: 0.75rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .subtitle-upload {
-      display: flex;
-      gap: 0.75rem;
-      align-items: center;
-    }
-
-    .subtitle-upload input[type="file"] {
-      display: none;
-    }
-
-    .subtitle-upload label {
-      padding: 0.625rem 1rem;
-      background: #1a1a1a;
-      border: 1px dashed #444;
-      border-radius: 8px;
-      color: #888;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .subtitle-upload label:hover {
-      border-color: #00d4ff;
-      color: #00d4ff;
-    }
-
-    .subtitle-status {
-      color: #666;
-      font-size: 0.8rem;
-    }
-
-    .subtitle-status.active {
-      color: #00d4ff;
-    }
-
     /* Premium Banner */
     .premium-banner {
       width: 100%;
-      max-width: 700px;
+      max-width: 600px;
       padding: 1rem 1.5rem;
-      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 153, 255, 0.05));
-      border: 1px solid rgba(0, 212, 255, 0.2);
-      border-radius: 12px;
+      background: linear-gradient(135deg, #2d1f3d, #1a1a2e);
+      border: 1px solid #3d2f4d;
+      border-radius: 8px;
       text-align: center;
       margin-bottom: 1.5rem;
     }
 
     .premium-banner a {
-      color: #00d4ff;
+      color: #c9a0ff;
       text-decoration: none;
-      font-weight: 500;
     }
 
     .premium-banner a:hover {
       text-decoration: underline;
+    }
+
+    /* Player Buttons */
+    .player-buttons {
+      display: flex;
+      gap: 0.75rem;
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .player-btn {
+      flex: 1;
+      min-width: 120px;
+      padding: 0.75rem 1rem;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .player-btn:hover {
+      background: #2a2a2a;
+      border-color: #444;
     }
 
     /* Footer */
@@ -422,36 +341,6 @@
         max-width: 100%;
       }
     }
-
-    /* Loading Overlay */
-    .loading-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.8);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-
-    .loading-overlay.show {
-      display: flex;
-    }
-
-    .loading-spinner {
-      width: 48px;
-      height: 48px;
-      border: 3px solid #333;
-      border-top-color: #00d4ff;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
   </style>
 </head>
 
@@ -469,43 +358,33 @@
 
   <main>
     <div class="player-container">
-      <video id="player" playsinline controls>
+      <video id="player" controls playsinline>
         <source src="{{file_url}}" type="video/mp4">
-        <!-- Subtitle track will be added dynamically -->
+        Your browser does not support the video tag.
       </video>
     </div>
 
     <div class="player-buttons">
       <a href="intent:{{file_url}}#Intent;package=com.mxtech.videoplayer.ad;end" class="player-btn">
-        <i class="fas fa-play-circle"></i> MX Player
+        <i class="fas fa-play"></i> MX Player
       </a>
       <a href="vlc://{{file_url}}" class="player-btn">
-        <i class="fas fa-play-circle"></i> VLC Player
+        <i class="fas fa-play"></i> VLC Player
       </a>
       <a href="playit://playerv2/video?url={{file_url}}" class="player-btn">
-        <i class="fas fa-play-circle"></i> PlayIt
+        <i class="fas fa-play"></i> PlayIt
       </a>
     </div>
 
     <a href="{{file_url}}" download="{{file_name}}" class="download-btn">
       <i class="fas fa-download"></i>
-      Download File
+      Download
     </a>
 
-    <!-- Subtitle Upload -->
-    <div class="subtitle-section">
-      <h3><i class="fas fa-closed-captioning"></i> Subtitles</h3>
-      <div class="subtitle-upload">
-        <input type="file" id="subtitle-file" accept=".vtt,.srt">
-        <label for="subtitle-file"><i class="fas fa-upload"></i> Upload Subtitle (.vtt, .srt)</label>
-        <span class="subtitle-status" id="subtitle-status">No subtitle loaded</span>
-      </div>
-    </div>
-
     <div class="embed-section">
-      <div class="embed-label">Embed code (click to copy)</div>
+      <div class="embed-label">Embed code</div>
       <div class="embed-code" onclick="copyEmbed(this)">
-        &lt;iframe src="{{file_url}}" frameborder="0" width="100%" height="450" allowfullscreen&gt;&lt;/iframe&gt;
+        &lt;iframe src="{{file_url}}" frameborder="0" width="700" height="430" allowfullscreen&gt;&lt;/iframe&gt;
       </div>
     </div>
 
@@ -543,126 +422,14 @@
     </div>
   </footer>
 
-  <!-- Loading Overlay -->
-  <div class="loading-overlay" id="loading">
-    <div class="loading-spinner"></div>
-  </div>
-
-  <!-- Plyr JS -->
-  <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
   <script>
-    // Initialize Plyr with advanced options
-    const player = new Plyr('#player', {
-      controls: [
-        'play-large',
-        'restart',
-        'rewind',
-        'play',
-        'fast-forward',
-        'progress',
-        'current-time',
-        'duration',
-        'mute',
-        'volume',
-        'captions',
-        'settings',
-        'pip',
-        'airplay',
-        'fullscreen'
-      ],
-      settings: ['captions', 'quality', 'speed'],
-      speed: { selected: 1, options: [0.5, 0.75, 1, 1.25, 1.5, 2] },
-      keyboard: { focused: true, global: true },
-      tooltips: { controls: true, seek: true },
-      captions: { active: true, language: 'auto', update: true },
-      previewThumbnails: { enabled: false },
-      storage: { enabled: true, key: 'kitstream-player' },
-      seekTime: 10,
-      invertTime: false
-    });
-
-    // Show loading on buffer
-    player.on('waiting', () => {
-      document.getElementById('loading').classList.add('show');
-    });
-
-    player.on('playing', () => {
-      document.getElementById('loading').classList.remove('show');
-    });
-
-    player.on('canplay', () => {
-      document.getElementById('loading').classList.remove('show');
-    });
-
-    // Subtitle upload handling
-    document.getElementById('subtitle-file').addEventListener('change', function (e) {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function (event) {
-        let content = event.target.result;
-
-        // Convert SRT to VTT if needed
-        if (file.name.endsWith('.srt')) {
-          content = srtToVtt(content);
-        }
-
-        // Create blob URL for subtitle
-        const blob = new Blob([content], { type: 'text/vtt' });
-        const url = URL.createObjectURL(blob);
-
-        // Add track to video
-        const video = document.getElementById('player');
-
-        // Remove existing tracks
-        const existingTracks = video.querySelectorAll('track');
-        existingTracks.forEach(t => t.remove());
-
-        // Add new track
-        const track = document.createElement('track');
-        track.kind = 'captions';
-        track.label = 'Custom Subtitle';
-        track.srclang = 'en';
-        track.src = url;
-        track.default = true;
-        video.appendChild(track);
-
-        // Enable captions
-        player.toggleCaptions(true);
-
-        document.getElementById('subtitle-status').textContent = '✓ ' + file.name;
-        document.getElementById('subtitle-status').classList.add('active');
-      };
-      reader.readAsText(file);
-    });
-
-    // SRT to VTT converter
-    function srtToVtt(srt) {
-      let vtt = 'WEBVTT\n\n';
-      // Replace SRT timestamp format with VTT format
-      vtt += srt.replace(/(\d{2}):(\d{2}):(\d{2}),(\d{3})/g, '$1:$2:$3.$4');
-      return vtt;
-    }
-
-    // Copy embed code
     function copyEmbed(el) {
-      const text = el.textContent;
+      const text = el.innerText;
       navigator.clipboard.writeText(text).then(() => {
         el.style.borderColor = '#00d4ff';
-        el.textContent = 'Copied!';
-        setTimeout(() => {
-          el.style.borderColor = '#333';
-          el.innerHTML = '&lt;iframe src="{{file_url}}" frameborder="0" width="100%" height="450" allowfullscreen&gt;&lt;/iframe&gt;';
-        }, 2000);
+        setTimeout(() => el.style.borderColor = '#333', 2000);
       });
     }
-
-    // Keyboard shortcuts info
-    console.log('KitStream Player Shortcuts:');
-    console.log('Space/K: Play/Pause | F: Fullscreen | M: Mute');
-    console.log('Arrow Left/J: Rewind 10s | Arrow Right/L: Forward 10s');
-    console.log('C: Toggle Captions | 0-9: Seek to 0%-90%');
   </script>
 </body>
 
