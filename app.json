@@ -1,6 +1,6 @@
 {
-  "name": "av_botz_update",
-  "description": "A Pyrogram Telegram bot to stream Telegram files to web. @bot_owner26",
+  "name": "kitstream",
+  "description": "A Pyrogram Telegram bot to stream Telegram files to web - KitStream",
   "keywords": [
     "telegram",
     "stream",
@@ -11,9 +11,9 @@
     "plugin",
     "modular",
     "media",
-    "bot"
+    "bot",
+    "kitstream"
   ],
-  "repository": "https://github.com/Botsthe/AV-FILE-TO-LINK-PRO.git",
   "success_url": "/",
   "logo": "https://i.ibb.co/v1YTMm3/icon.png",
   "env": {
@@ -35,7 +35,7 @@
     },
     "SESSION": {
       "description": "Pyrogram session string or name",
-      "value": "Webavbot"
+      "value": "KitStream"
     },
     "BIN_CHANNEL": {
       "description": "File store channel ID"
@@ -62,12 +62,10 @@
       "description": "Bot username without @"
     },
     "CHANNEL": {
-      "description": "Public updates channel URL",
-      "value": "https://t.me/AV_BOTz_UPDATE"
+      "description": "Public updates channel URL"
     },
     "SUPPORT": {
-      "description": "Support group URL",
-      "value": "https://t.me/AV_SUPPORT_GROUP"
+      "description": "Support group URL"
     },
     "HOW_TO_VERIFY": {
       "description": "Link to verification guide"
@@ -123,7 +121,7 @@
     },
     "DATABASE_NAME": {
       "description": "MongoDB database name",
-      "value": "Cluster0"
+      "value": "kitstream"
     },
     "QR_CODE": {
       "description": "QR code image URL"
@@ -132,12 +130,10 @@
       "description": "Verification success image URL"
     },
     "AUTH_PICS": {
-      "description": "Authentication instruction image",
-      "value": "https://envs.sh/AwV.jpg"
+      "description": "Authentication instruction image"
     },
     "PICS": {
-      "description": "Default bot image",
-      "value": "https://envs.sh/b6H.jpg"
+      "description": "Default bot image"
     },
     "FILE_CAPTION": {
       "description": "Caption template for single file"
@@ -174,7 +170,7 @@
     },
     "name": {
       "description": "Bot session name",
-      "value": "File-To-Link"
+      "value": "KitStream"
     },
     "PORT": {
       "description": "Port number for web server",
@@ -210,4 +206,4 @@
       "size": "eco"
     }
   }
-  }
+}

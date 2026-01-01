@@ -2,7 +2,7 @@ import re, math, logging, secrets, time, mimetypes
 from aiohttp import web
 from aiohttp.http_exceptions import BadStatusLine
 from info import *
-from web.server import multi_clients, work_loads, Webavbot
+from web.server import multi_clients, work_loads, kit_stream_bot
 from web.server.exceptions import FIleNotFound, InvalidHash
 from web.utils.custom_dl import ByteStreamer
 from utils import get_readable_time

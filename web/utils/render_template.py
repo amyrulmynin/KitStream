@@ -6,20 +6,17 @@ import logging
 import aiohttp
 from web.utils.Template import avbotz_template
 from info import *
-from web.server import Webavbot
+from web.server import kit_stream_bot
 from utils import get_size
 from web.utils.file_properties import get_file_ids
 from web.server.exceptions import InvalidHash
 
-# Dont Remove My Credit @AV_BOTz_UPDATE 
-# This Repo Is By @BOT_OWNER26 
-# For Any Kind Of Error Ask Us In Support Group @AV_SUPPORT_GROUP
 
 async def render_page(id: str, secure_hash: str, src: str = None) -> str:
     # Step 1: Fetch Telegram file and metadata
     try:
-        file = await Webavbot.get_messages(int(BIN_CHANNEL), int(id))
-        file_data = await get_file_ids(Webavbot, int(BIN_CHANNEL), int(id))
+        file = await kit_stream_bot.get_messages(int(BIN_CHANNEL), int(id))
+        file_data = await get_file_ids(kit_stream_bot, int(BIN_CHANNEL), int(id))
     except Exception as e:
         logging.error(f"Error fetching file info: {e}")
         raise
@@ -70,7 +67,7 @@ async def render_page(id: str, secure_hash: str, src: str = None) -> str:
         return "Template Error"
 
     # Step 6: Prepare file name safely
-    file_name = file_data.file_name.replace("_", " ") if file_data.file_name else f"AV_File_{id}.mkv"
+    file_name = file_data.file_name.replace("_", " ") if file_data.file_name else f"KitStream_File_{id}.mkv"
 
     # Step 7: Render template with values
     return template.render(
@@ -82,7 +79,4 @@ async def render_page(id: str, secure_hash: str, src: str = None) -> str:
         disclaimer=avbotz_template.DISCLAIMER,
         report_link=avbotz_template.REPORT_LINK,
         colours=avbotz_template.COLOURS,
-                                    )
-# Dont Remove My Credit @AV_BOTz_UPDATE 
-# This Repo Is By @BOT_OWNER26 
-# For Any Kind Of Error Ask Us In Support Group @AV_SUPPORT_GROUP
+    )

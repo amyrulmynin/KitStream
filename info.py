@@ -4,7 +4,7 @@ from typing import Set, Optional, List, Dict
 from Script import script  # Custom script file with caption & other settings
 
 # 🚀 Bot Session and Token Information
-SESSION = environ.get('SESSION', 'Webavbot')  # Pyrogram client session name
+SESSION = environ.get('SESSION', 'KitStream')  # Pyrogram client session name
 
 API_ID = int(environ.get('API_ID', '12300656'))  # Telegram API ID
 API_HASH = environ.get('API_HASH', 'd927c13beaaf5110f5b7c071273')  # Telegram API Hash
@@ -26,10 +26,10 @@ OWNER_USERNAME = environ.get("OWNER_USERNAME", 'BOT_OWNER26')  # Owner's usernam
 BOT_USERNAME = environ.get("BOT_USERNAME", 'AV_F2L_BOT')  # Bot's username
 
 # 🔗 Channel & Support Links
-CHANNEL = environ.get('CHANNEL', 'https://t.me/AV_BOTz_UPDATE')  # Updates channel
-SUPPORT = environ.get('SUPPORT', 'https://t.me/AV_SUPPORT_GROUP')  # Support group
-HOW_TO_VERIFY = environ.get('HOW_TO_VERIFY', 'https://t.me/')  # Verification guide link
-HOW_TO_OPEN = environ.get('HOW_TO_OPEN', 'https://t.me/')  # File access guide link
+CHANNEL = environ.get('CHANNEL', '')  # Updates channel
+SUPPORT = environ.get('SUPPORT', '')  # Support group
+HOW_TO_VERIFY = environ.get('HOW_TO_VERIFY', '')  # Verification guide link
+HOW_TO_OPEN = environ.get('HOW_TO_OPEN', '')  # File access guide link
 
 # ✅ Feature Toggles (True/False)
 VERIFY = environ.get("VERIFY", False)  # Enable user verification
@@ -74,7 +74,7 @@ WORKERS = int(getenv('WORKERS', '4'))  # Number of async workers
 MULTI_CLIENT = False  # Enable multi-client handling (if needed)
 
 # 🔧 App/Heroku Configuration
-name = str(environ.get('name', 'avbotz'))  # Project name
+name = str(environ.get('name', 'kitstream'))  # Project name
 APP_NAME = None
 if 'DYNO' in environ:
     ON_HEROKU = True

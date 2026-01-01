@@ -167,7 +167,7 @@ async def update_verify_status(userid, date_temp, time_temp):
 async def verify_user(bot, userid, token):
     user = await bot.get_users(int(userid))
     temp.TOKENS[user.id] = {token: True}
-    tz = pytz.timezone('Asia/Kolkata')
+    tz = pytz.timezone('Asia/Kuala_Lumpur')
     expiry = datetime.now(tz) + timedelta(seconds=VERIFY_EXPIRE)
     date_str = expiry.strftime("%Y-%m-%d")
     time_str = expiry.strftime("%H:%M:%S")

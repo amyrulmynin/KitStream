@@ -2,10 +2,6 @@ import os, sys, glob, pytz, asyncio, logging, importlib
 from pathlib import Path
 from pyrogram import idle
 
-#Dont Remove My Credit @AV_BOTz_UPDATE 
-#This Repo Is By @BOT_OWNER26 
-# For Any Kind Of Error Ask Us In Support Group @AV_SUPPORT_GROUP
-
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -20,23 +16,19 @@ from Script import script
 from datetime import date, datetime 
 from aiohttp import web
 from web import web_server, check_expired_premium
-from web.server import Webavbot
+from web.server import kit_stream_bot
 from utils import temp, ping_server
 from web.server.clients import initialize_clients
 
-#Dont Remove My Credit @AV_BOTz_UPDATE 
-#This Repo Is By @BOT_OWNER26 
-# For Any Kind Of Error Ask Us In Support Group @AV_SUPPORT_GROUP
-
 ppath = "plugins/*.py"
 files = glob.glob(ppath)
-Webavbot.start()
+kit_stream_bot.start()
 loop = asyncio.get_event_loop()
 
 async def start():
     print('\n')
-    print('Initalizing Your Bot')
-    bot_info = await Webavbot.get_me()
+    print('Initializing KitStream Bot...')
+    bot_info = await kit_stream_bot.get_me()
     await initialize_clients()
     for name in files:
         with open(name) as a:
@@ -50,37 +42,29 @@ async def start():
             sys.modules["plugins." + plugin_name] = load
             print("Imported => " + plugin_name)
 
-#Dont Remove My Credit @AV_BOTz_UPDATE 
-#This Repo Is By @BOT_OWNER26 
-# For Any Kind Of Error Ask Us In Support Group @AV_SUPPORT_GROUP
-    
     if ON_HEROKU:
         asyncio.create_task(ping_server())
-    me = await Webavbot.get_me()
-    temp.BOT = Webavbot
+    me = await kit_stream_bot.get_me()
+    temp.BOT = kit_stream_bot
     temp.ME = me.id
     temp.U_NAME = me.username
     temp.B_NAME = me.first_name
-    tz = pytz.timezone('Asia/Kolkata')
+    tz = pytz.timezone('Asia/Kuala_Lumpur')
     today = date.today()
     now = datetime.now(tz)
     time = now.strftime("%H:%M:%S %p")
-    Webavbot.loop.create_task(check_expired_premium(Webavbot))
-    await Webavbot.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_TXT.format(today, time))
-    await Webavbot.send_message(chat_id=ADMINS[0] ,text='<b>ʙᴏᴛ ʀᴇsᴛᴀʀᴛᴇᴅ !!</b>')
-    await Webavbot.send_message(chat_id=SUPPORT_GROUP, text=f"<b>{me.mention} ʀᴇsᴛᴀʀᴛᴇᴅ 🤖</b>")
+    kit_stream_bot.loop.create_task(check_expired_premium(kit_stream_bot))
+    await kit_stream_bot.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_TXT.format(today, time))
+    await kit_stream_bot.send_message(chat_id=ADMINS[0], text='<b>KitStream Bot Restarted!!</b>')
+    await kit_stream_bot.send_message(chat_id=SUPPORT_GROUP, text=f"<b>{me.mention} ʀᴇsᴛᴀʀᴛᴇᴅ 🤖</b>")
     app = web.AppRunner(await web_server())
     await app.setup()
     bind_address = "0.0.0.0"
     await web.TCPSite(app, bind_address, PORT).start()
     await idle()
 
-#Dont Remove My Credit @AV_BOTz_UPDATE 
-#This Repo Is By @BOT_OWNER26 
-# For Any Kind Of Error Ask Us In Support Group @AV_SUPPORT_GROUP
-
 if __name__ == '__main__':
     try:
         loop.run_until_complete(start())
     except KeyboardInterrupt:
-        logging.info('----------------------- Service Stopped -----------------------')
+        logging.info('----------------------- KitStream Service Stopped -----------------------')

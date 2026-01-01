@@ -3,15 +3,11 @@ import logging
 from info import *
 from pyrogram import Client
 from web.utils.config_parser import TokenParser
-from web.server import multi_clients, work_loads, Webavbot
-
-# Dont Remove My Credit @AV_BOTz_UPDATE 
-# This Repo Is By @BOT_OWNER26 
-# For Any Kind Of Error Ask Us In Support Group @AV_SUPPORT_GROUP
+from web.server import multi_clients, work_loads, kit_stream_bot
 
 async def initialize_clients():
     global MULTI_CLIENT
-    multi_clients[0] = Webavbot
+    multi_clients[0] = kit_stream_bot
     work_loads[0] = 0
 
     all_tokens = TokenParser().parse_from_env()
@@ -28,7 +24,7 @@ async def initialize_clients():
                 logging.info("This will take some time, please wait...")
 
             client = await Client(
-                name=f"AVClient_{client_id}",
+                name=f"KitStreamClient_{client_id}",
                 api_id=API_ID,
                 api_hash=API_HASH,
                 bot_token=token,

@@ -4,7 +4,7 @@ from typing import Union, Optional, AsyncGenerator
 from info import *
 from utils import temp
 
-# Logging Setup (Better)
+# Logging Setup
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -13,11 +13,7 @@ for mod in ["aiohttp", "pyrogram", "aiohttp.web"]:
     logging.getLogger(mod).setLevel(logging.ERROR)
 
 
-# Dont Remove My Credit @AV_BOTz_UPDATE 
-# This Repo Is By @BOT_OWNER26 
-# For Any Kind Of Error Ask Us In Support Group @AV_SUPPORT_GROUP
-
-class WebXBot(Client):
+class KitStreamBot(Client):
     def __init__(self):
         super().__init__(
             name=SESSION,
@@ -59,7 +55,7 @@ class WebXBot(Client):
 
 
 # ✅ Global single client instance
-Webavbot = WebXBot()
+kit_stream_bot = KitStreamBot()
 
 # ✅ Client management setup
 multi_clients = {}
