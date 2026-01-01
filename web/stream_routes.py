@@ -152,3 +152,240 @@ async def media_streamer(request: web.Request, id: int, secure_hash: str):
         await response.write_eof()
 
     return response
+
+
+# ==========================================
+# ADMIN DASHBOARD ROUTES
+# ==========================================
+
+import hashlib
+import hmac
+from database.users_db import db
+from info import ADMINS, BOT_TOKEN, BOT_USERNAME
+
+# Admin session storage (simple in-memory, use redis for production)
+admin_sessions = {}
+
+def verify_telegram_auth(auth_data: dict) -> bool:
+    """Verify Telegram login widget data"""
+    check_hash = auth_data.pop('hash', None)
+    if not check_hash:
+        return False
+    
+    # Create data check string
+    data_check_arr = [f"{k}={v}" for k, v in sorted(auth_data.items())]
+    data_check_string = "\n".join(data_check_arr)
+    
+    # Create secret key from bot token
+    secret_key = hashlib.sha256(BOT_TOKEN.encode()).digest()
+    
+    # Calculate hash
+    calculated_hash = hmac.new(
+        secret_key, 
+        data_check_string.encode(), 
+        hashlib.sha256
+    ).hexdigest()
+    
+    return calculated_hash == check_hash
+
+def is_admin(user_id: int) -> bool:
+    """Check if user is in ADMINS list"""
+    return user_id in ADMINS
+
+@routes.get("/admin/login")
+async def admin_login_handler(request: web.Request):
+    """Admin login page"""
+    try:
+        template_file = os.path.join("web", "template", "login.html")
+        async with aiofiles.open(template_file, mode='r') as f:
+            content = await f.read()
+        content = content.replace("{{bot_username}}", BOT_USERNAME)
+        return web.Response(text=content, content_type="text/html")
+    except Exception as e:
+        logging.error(f"Error loading login page: {e}")
+        return web.Response(text="Error loading login page", status=500)
+
+@routes.get("/admin/auth")
+async def admin_auth_handler(request: web.Request):
+    """Handle Telegram OAuth callback"""
+    query_params = dict(request.rel_url.query)
+    
+    if not query_params:
+        raise web.HTTPBadRequest(text="No auth data")
+    
+    # Verify the auth data
+    auth_data = query_params.copy()
+    user_id = int(auth_data.get('id', 0))
+    
+    if not verify_telegram_auth(auth_data.copy()):
+        raise web.HTTPForbidden(text="Invalid authentication")
+    
+    if not is_admin(user_id):
+        raise web.HTTPForbidden(text="You are not authorized to access admin panel")
+    
+    # Create session
+    session_id = secrets.token_urlsafe(32)
+    admin_sessions[session_id] = {
+        "user_id": user_id,
+        "username": auth_data.get('username', ''),
+        "first_name": auth_data.get('first_name', 'Admin'),
+        "auth_date": auth_data.get('auth_date')
+    }
+    
+    # Redirect to admin with session cookie
+    response = web.HTTPFound('/admin')
+    response.set_cookie('admin_session', session_id, max_age=86400, httponly=True)
+    return response
+
+def get_admin_session(request: web.Request):
+    """Get admin session from cookie"""
+    session_id = request.cookies.get('admin_session')
+    if session_id and session_id in admin_sessions:
+        return admin_sessions[session_id]
+    return None
+
+@routes.get("/admin")
+async def admin_dashboard_handler(request: web.Request):
+    """Admin dashboard page"""
+    session = get_admin_session(request)
+    if not session:
+        raise web.HTTPFound('/admin/login')
+    
+    try:
+        template_file = os.path.join("web", "template", "admin.html")
+        async with aiofiles.open(template_file, mode='r') as f:
+            content = await f.read()
+        return web.Response(text=content, content_type="text/html")
+    except Exception as e:
+        logging.error(f"Error loading admin page: {e}")
+        return web.Response(text="Error loading admin page", status=500)
+
+@routes.get("/admin/logout")
+async def admin_logout_handler(request: web.Request):
+    """Logout admin"""
+    session_id = request.cookies.get('admin_session')
+    if session_id and session_id in admin_sessions:
+        del admin_sessions[session_id]
+    
+    response = web.HTTPFound('/admin/login')
+    response.del_cookie('admin_session')
+    return response
+
+# Admin API Routes
+@routes.get("/admin/api/stats")
+async def admin_api_stats(request: web.Request):
+    """Get dashboard statistics"""
+    session = get_admin_session(request)
+    if not session:
+        raise web.HTTPUnauthorized(text="Not authenticated")
+    
+    stats = await db.get_admin_stats()
+    stats["uptime"] = get_readable_time(time.time() - StartTime)
+    stats["connected_clients"] = len(multi_clients)
+    stats["version"] = __version__
+    return web.json_response(stats)
+
+@routes.get("/admin/api/files")
+async def admin_api_files(request: web.Request):
+    """Get files list"""
+    session = get_admin_session(request)
+    if not session:
+        raise web.HTTPUnauthorized(text="Not authenticated")
+    
+    page = int(request.rel_url.query.get('page', 1))
+    search = request.rel_url.query.get('search', '')
+    result = await db.get_files_paginated(page=page, search=search)
+    return web.json_response(result)
+
+@routes.delete("/admin/api/files/{file_id}")
+async def admin_api_delete_file(request: web.Request):
+    """Delete a file"""
+    session = get_admin_session(request)
+    if not session:
+        raise web.HTTPUnauthorized(text="Not authenticated")
+    
+    file_id = request.match_info['file_id']
+    await db.delete_file_by_id(file_id)
+    return web.json_response({"success": True})
+
+@routes.get("/admin/api/users")
+async def admin_api_users(request: web.Request):
+    """Get users list"""
+    session = get_admin_session(request)
+    if not session:
+        raise web.HTTPUnauthorized(text="Not authenticated")
+    
+    page = int(request.rel_url.query.get('page', 1))
+    result = await db.get_users_paginated(page=page)
+    return web.json_response(result)
+
+@routes.post("/admin/api/users/{user_id}/ban")
+async def admin_api_ban_user(request: web.Request):
+    """Ban a user"""
+    session = get_admin_session(request)
+    if not session:
+        raise web.HTTPUnauthorized(text="Not authenticated")
+    
+    user_id = int(request.match_info['user_id'])
+    await db.block_user(user_id, reason="Banned by admin")
+    return web.json_response({"success": True})
+
+@routes.post("/admin/api/users/{user_id}/unban")
+async def admin_api_unban_user(request: web.Request):
+    """Unban a user"""
+    session = get_admin_session(request)
+    if not session:
+        raise web.HTTPUnauthorized(text="Not authenticated")
+    
+    user_id = int(request.match_info['user_id'])
+    await db.unblock_user(user_id)
+    return web.json_response({"success": True})
+
+@routes.get("/admin/api/premium")
+async def admin_api_premium(request: web.Request):
+    """Get premium users list"""
+    session = get_admin_session(request)
+    if not session:
+        raise web.HTTPUnauthorized(text="Not authenticated")
+    
+    result = await db.get_premium_users_list()
+    return web.json_response(result)
+
+@routes.post("/admin/api/premium/{user_id}")
+async def admin_api_add_premium(request: web.Request):
+    """Add premium to user"""
+    session = get_admin_session(request)
+    if not session:
+        raise web.HTTPUnauthorized(text="Not authenticated")
+    
+    user_id = int(request.match_info['user_id'])
+    try:
+        data = await request.json()
+        days = data.get('days', 30)
+    except:
+        days = 30
+    
+    await db.add_premium_access(user_id, days)
+    return web.json_response({"success": True})
+
+@routes.delete("/admin/api/premium/{user_id}")
+async def admin_api_remove_premium(request: web.Request):
+    """Remove premium from user"""
+    session = get_admin_session(request)
+    if not session:
+        raise web.HTTPUnauthorized(text="Not authenticated")
+    
+    user_id = int(request.match_info['user_id'])
+    await db.remove_premium_access(user_id)
+    return web.json_response({"success": True})
+
+@routes.get("/admin/api/banned")
+async def admin_api_banned(request: web.Request):
+    """Get banned users list"""
+    session = get_admin_session(request)
+    if not session:
+        raise web.HTTPUnauthorized(text="Not authenticated")
+    
+    result = await db.get_banned_users_list()
+    return web.json_response(result)
+

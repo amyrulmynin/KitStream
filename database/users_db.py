@@ -205,4 +205,93 @@ class Database:
             {"id": user_id}, {"$set": {"expiry_time": None}}
         )
 
+    # 📊 ADMIN DASHBOARD METHODS --------------------
+    
+    async def get_admin_stats(self):
+        """Get dashboard statistics"""
+        return {
+            "total_files": await self.files.count_documents({}),
+            "total_users": await self.users.count_documents({}),
+            "premium_users": await self.all_premium_users_count(),
+            "banned_users": await self.blocked_users.count_documents({})
+        }
+    
+    async def get_files_paginated(self, page=1, limit=20, search=""):
+        """Get paginated files list"""
+        skip = (page - 1) * limit
+        query = {}
+        if search:
+            query["file_name"] = {"$regex": search, "$options": "i"}
+        
+        cursor = self.files.find(query).sort("timestamp", -1).skip(skip).limit(limit)
+        files = []
+        async for file in cursor:
+            files.append({
+                "file_id": file.get("file_id"),
+                "file_name": file.get("file_name", "Unknown"),
+                "file_size": file.get("file_size", "-"),
+                "user_id": file.get("user_id"),
+                "timestamp": file.get("timestamp", 0),
+                "hash": file.get("hash", "")
+            })
+        total = await self.files.count_documents(query)
+        return {"files": files, "total": total, "page": page}
+    
+    async def delete_file_by_id(self, file_id):
+        """Delete file from database"""
+        return await self.files.delete_one({"file_id": int(file_id)})
+    
+    async def get_users_paginated(self, page=1, limit=20):
+        """Get paginated users list with file count"""
+        skip = (page - 1) * limit
+        cursor = self.users.find({}).skip(skip).limit(limit)
+        users = []
+        async for user in cursor:
+            user_id = user.get("id")
+            file_count = await self.files.count_documents({"user_id": user_id})
+            is_banned = await self.is_user_blocked(user_id)
+            users.append({
+                "user_id": user_id,
+                "name": user.get("name", "Unknown"),
+                "file_count": file_count,
+                "banned": is_banned
+            })
+        total = await self.users.count_documents({})
+        return {"users": users, "total": total, "page": page}
+    
+    async def get_premium_users_list(self):
+        """Get all premium users"""
+        cursor = self.users.find({"expiry_time": {"$gt": datetime.now()}})
+        users = []
+        async for user in cursor:
+            users.append({
+                "user_id": user.get("id"),
+                "name": user.get("name", "Unknown"),
+                "expires": user.get("expiry_time").strftime("%Y-%m-%d %H:%M") if user.get("expiry_time") else "Never"
+            })
+        return {"users": users}
+    
+    async def add_premium_access(self, user_id, days):
+        """Add premium access for a user"""
+        expiry = datetime.now() + timedelta(days=days)
+        await self.users.update_one(
+            {"id": int(user_id)},
+            {"$set": {"expiry_time": expiry}},
+            upsert=True
+        )
+        return True
+    
+    async def get_banned_users_list(self):
+        """Get all banned users"""
+        cursor = self.blocked_users.find({})
+        users = []
+        async for user in cursor:
+            users.append({
+                "user_id": user.get("user_id"),
+                "reason": user.get("reason", "No reason"),
+                "banned_at": user.get("blocked_at").strftime("%Y-%m-%d") if user.get("blocked_at") else "-"
+            })
+        return {"users": users}
+
 db = Database()
+

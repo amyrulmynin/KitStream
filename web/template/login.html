@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - KitStream</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+    <script async src="https://telegram.org/js/telegram-widget.js?22"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#00d4ff',
+                        dark: '#0a0a0f',
+                        card: '#111118',
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-dark min-h-screen flex items-center justify-center">
+    <div class="max-w-md w-full mx-4">
+        <div class="bg-card border border-white/10 rounded-2xl p-8 text-center">
+            <!-- Logo -->
+            <div class="flex items-center justify-center gap-2 mb-6">
+                <span class="material-symbols-outlined text-primary text-4xl">bolt</span>
+                <span class="text-white text-2xl font-bold">KitStream</span>
+            </div>
+
+            <h1 class="text-white text-xl font-semibold mb-2">Admin Login</h1>
+            <p class="text-white/50 text-sm mb-8">Login with your Telegram account to access the admin dashboard</p>
+
+            <!-- Telegram Login Widget -->
+            <div id="telegram-login" class="flex justify-center mb-6">
+                <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="{{bot_username}}"
+                    data-size="large" data-radius="12" data-auth-url="/admin/auth" data-request-access="write">
+                    </script>
+            </div>
+
+            <!-- Info -->
+            <div class="bg-white/5 border border-white/10 rounded-xl p-4 text-left">
+                <div class="flex items-start gap-3">
+                    <span class="material-symbols-outlined text-yellow-400 text-xl">info</span>
+                    <div>
+                        <p class="text-white text-sm font-medium mb-1">Admin Access Only</p>
+                        <p class="text-white/50 text-xs">Only authorized administrators can access this dashboard. Your
+                            Telegram ID must be in the admin list.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Back Link -->
+            <a href="/"
+                class="inline-flex items-center gap-2 text-white/40 hover:text-white text-sm mt-6 transition-colors">
+                <span class="material-symbols-outlined text-lg">arrow_back</span>
+                Back to home
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>
